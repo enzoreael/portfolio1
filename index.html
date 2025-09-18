@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enzo's Photography Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #0a84ff;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --glass-dark: rgba(20, 20, 30, 0.85);
+            --glass-light: rgba(40, 40, 60, 0.6);
+            --text-light: #f5f5f7;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(25, 25, 35, 0.95);
+            --sale-color: #ff375f;
+        }
+
+        body {
+            background: var(--darker-bg);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 20px;
+            background: rgba(15, 15, 25, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 150px 20px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            filter: brightness(0.4);
+        }
+
+        .hero-content {
+            background: rgba(20, 20, 30, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .social-boxes {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .social-box {
+            background: var(--glass-light);
+            border: 1px solid var(--border-color);
+            padding: 15px 25px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-light);
+        }
+
+        .social-box:hover {
+            transform: translateY(-5px);
+            border: 1px solid var(--primary-blue);
+            background: rgba(10, 132, 255, 0.2);
+        }
+
+        .social-icon {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+        }
+
+        .social-text {
+            font-weight: 600;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-light);
+            font-size: 2.5rem;
+            animation: bounce 2s infinite;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+            40% {transform: translateY(-20px) translateX(-50%);}
+            60% {transform: translateY(-10px) translateX(-50%);}
+        }
+
+        /* Gallery Section */
+        .gallery {
+            padding: 100px 20px;
+            background: var(--dark-bg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            font-weight: 700;
+            color: var(--text-light);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .gallery-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .gallery-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            border: 1px solid var(--primary-blue);
+            box-shadow: 0 15px 35px rgba(10, 132, 255, 0.15);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .gallery-info {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .gallery-desc {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .gallery-date {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-top: auto;
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 20px;
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .about.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-image {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            height: 400px;
+            background: linear-gradient(45deg, #001235, #003366);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 3rem;
+            background-image: url('https://images.unsplash.com/photo-1622551375180-2bd495cb3b6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Gear Section */
+        .gear {
+            padding: 100px 20px;
+            background: var(--dark-bg);
+            border-top: 1px solid var(--border-color);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .gear.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gear-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .gear-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .gear-item:hover {
+            transform: translateY(-5px);
+            border: 1px solid var(--primary-blue);
+            box-shadow: 0 10px 25px rgba(10, 132, 255, 0.1);
+        }
+
+        .gear-icon {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .gear-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .gear-desc {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 100px 20px;
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border-color);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .contact.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .contact-content p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .contact-btn {
+            background: var(--primary-blue);
+            color: var(--text-light);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .contact-btn:hover {
+            background: #0071e3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(10, 132, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker-bg);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .credits {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .credit {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .deepseek-logo {
+            height: 20px;
+            width: auto;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 968px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .about-image {
+                height: 300px;
+            }
+            
+            .hero-content {
+                padding: 30px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 15px;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 180px 20px 60px;
+            }
+            
+            .hero-content {
+                padding: 25px;
+                margin: 0 15px 40px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .social-boxes {
+                flex-direction: column;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .about-text h2 {
+                font-size: 2.2rem;
+            }
+            
+            .contact-content h2 {
+                font-size: 2.2rem;
+            }
+            
+            .credits {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .scroll-down {
+                font-size: 2rem;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 0.15em solid var(--primary-blue);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 0.05em;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary-blue) }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <img src="https://p16-pu-sign-no.tiktokcdn-eu.com/tos-no1a-avt-0068c001-no/9d6953940b54054f65796f3ddd48f349~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=10399&refresh_token=f67db790&x-expires=1757851200&x-signature=q9Qe3UwYWAGLeDY3pz6EQTMvj%2BY%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=no1a" alt="Enzo" class="logo-img">
+                <span class="logo-text">enzo.carsss</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#about">About</a>
+                <a href="#gear">My Gear</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="typewriter">Hey, I'm Enzo</h1>
+            <p>A 15-year-old photographer and videographer who's passionate about capturing moments and telling stories through my lens. Welcome to my creative journey.</p>
+            
+            <div class="social-boxes">
+                <a href="https://www.tiktok.com/@enzo.carsss" class="social-box" target="_blank">
+                    <i class="fab fa-tiktok social-icon"></i>
+                    <span class="social-text">Follow on TikTok</span>
+                </a>
+                <a href="https://www.instagram.com/enzo.carsss" class="social-box" target="_blank">
+                    <i class="fab fa-instagram social-icon"></i>
+                    <span class="social-text">Follow on Instagram</span>
+                </a>
+            </div>
+        </div>
+        
+        <a href="#gallery" class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </section>
+
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <h2 class="section-title">My Gallery</h2>
+            <div class="gallery-grid">
+                <!-- Photo 1 -->
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1535732820275-9ffd998cac22?ixlib=rb-4.0.3&auto=format&fit=crop&w=1064&q=80" alt="Car Photography" class="gallery-image">
+                    <div class="gallery-info">
+                        <h3 class="gallery-title">Porsche in the Rain</h3>
+                        <p class="gallery-desc">Captured this beautiful Porsche 911 GT3 on a rainy evening. The reflections and moody atmosphere created the perfect shot.</p>
+                        <span class="gallery-date">October 15, 2023</span>
+                    </div>
+                </div>
+                
+                <!-- Photo 2 -->
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80" alt="Sunset Drone Shot" class="gallery-image">
+                    <div class="gallery-info">
+                        <h3 class="gallery-title">Golden Hour Drone Shot</h3>
+                        <p class="gallery-desc">Aerial view of the coastline during golden hour. The way the light hits the water creates a magical atmosphere.</p>
+                        <span class="gallery-date">September 22, 2023</span>
+                    </div>
+                </div>
+                
+                <!-- Photo 3 -->
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1491147334573-44cbb4602074?ixlib=rb-4.0.3&auto=format&fit=crop&w=1047&q=80" alt="Night Photography" class="gallery-image">
+                    <div class="gallery-info">
+                        <h3 class="gallery-title">Urban Night Lights</h3>
+                        <p class="gallery-desc">Long exposure shot of city traffic at night. I love how the light trails create patterns against the dark sky.</p>
+                        <span class="gallery-date">August 5, 2023</span>
+                    </div>
+                </div>
+                
+                <!-- Photo 4 -->
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80" alt="Mountain Photography" class="gallery-image">
+                    <div class="gallery-info">
+                        <h3 class="gallery-title">Mountain Adventure</h3>
+                        <p class="gallery-desc">Hiked for 3 hours to capture this sunrise over the mountains. Worth every step for this breathtaking view.</p>
+                        <span class="gallery-date">July 18, 2023</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">My Story</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <!-- Background image already set in CSS -->
+                </div>
+                <div class="about-text">
+                    <h2>Enzo - Young Creative Visionary</h2>
+                    <p>I'm a 15-year-old photographer and videographer with a passion for visual storytelling. My journey began when I got my first camera at 13, and since then, I've been completely hooked on capturing the world through my lens.</p>
+                    <p>I specialize in automotive photography, landscapes, and cinematic video editing. There's something magical about being able to freeze a moment in time or tell a story through moving images.</p>
+                    <p>When I'm not out shooting or editing, I'm learning new techniques, studying the work of photographers I admire, or experimenting with different styles and approaches to my craft.</p>
+                    <p>This blog is where I share my journey, my favorite shots, and what I'm learning along the way. Thanks for stopping by!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gear" id="gear">
+        <div class="container">
+            <h2 class="section-title">My Photography Gear</h2>
+            <div class="gear-content">
+                <div class="gear-item">
+                    <i class="fas fa-camera gear-icon"></i>
+                    <h3 class="gear-title">Camera Body</h3>
+                    <p class="gear-desc">I use a Sony A7III as my main camera. Its versatility and low-light performance make it perfect for all types of photography.</p>
+                </div>
+                
+                <div class="gear-item">
+                    <i class="fas fa-camera-retro gear-icon"></i>
+                    <h3 class="gear-title">Lenses</h3>
+                    <p class="gear-desc">My go-to lenses are the 24-70mm f/2.8 for versatility, and a 85mm f/1.8 for portraits and detail shots.</p>
+                </div>
+                
+                <div class="gear-item">
+                    <i class="fas fa-video gear-icon"></i>
+                    <h3 class="gear-title">Video Equipment</h3>
+                    <p class="gear-desc">For video, I use a DJI Ronin SC gimbal for smooth shots and a Rode VideoMic for better audio quality.</p>
+                </div>
+                
+                <div class="gear-item">
+                    <i class="fas fa-laptop gear-icon"></i>
+                    <h3 class="gear-title">Editing Setup</h3>
+                    <p class="gear-desc">I edit my photos in Lightroom and my videos in Premiere Pro. My color grading skills are constantly evolving!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-content">
+                <h2>Get In Touch</h2>
+                <p>Want to collaborate, ask a question, or just talk photography? I'm always open to connecting with fellow creatives and enthusiasts!</p>
+                <a href="mailto:enzo.carsss@gmail.com" class="contact-btn">Send Me an Email</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="credits">
+                    <div class="credit">
+                        <span>© 2023 Enzo's Photography Blog</span>
+                    </div>
+                    <div class="credit">
+                        <span>Powered by passion and pixels</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Simple typewriter effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const typewriter = document.querySelector('.typewriter');
+            setTimeout(() => {
+                typewriter.style.borderRightColor = 'transparent';
+            }, 3500);
+            
+            // Scroll animation for elements
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all sections and gallery items
+            document.querySelectorAll('.section-title, .gallery-item, .about, .gear, .contact').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
